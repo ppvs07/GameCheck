@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}GameCheck | Catálogo{% endblock %}
+{% block content %}
+<section class="hero"><div class="eyebrow">SEU UNIVERSO GAMER</div><h1>Os melhores jogos.<br><span class="accent">Sua opinião conta.</span></h1><p>Explore o catálogo, encontre seu próximo jogo e compartilhe avaliações com a comunidade.</p></section>
+<form class="filters" method="get" action="{{ url_for('index') }}">
+<input aria-label="Pesquisar jogos" name="q" placeholder="🔎  Pesquisar por jogo ou gênero..." value="{{ busca }}">
+<select name="plataforma" aria-label="Plataforma">
+<option value="">Todas as plataformas</option>
+{% for p in ["PC","PS4","PS5","Xbox One","Xbox Series X|S"] %}<option value="{{ p }}" {% if plataforma==p %}selected{% endif %}>{{ p }}</option>{% endfor %}
+</select><button type="submit">Buscar</button><a class="clear" href="{{ url_for('index') }}">Limpar</a>
+</form>
+<div class="section-head"><h2>Catálogo de jogos</h2><span>{{ jogos|length }} encontrado(s)</span></div>
+<div class="cards">
+{% for jogo in jogos %}
+<a class="game-card" href="{{ url_for('jogo',jogo_id=jogo.id) }}">
+<div class="cover" style="--cover:{{ jogo.cor }}"><span class="cover-icon">✦</span><span class="cover-title">{{ jogo.titulo }}</span></div>
+<div class="game-body"><span class="genre">{{ jogo.genero }} • {{ jogo.ano }}</span><h3>{{ jogo.titulo }}</h3><p>{{ jogo.descricao }}</p><div class="game-bottom"><span class="rating">★ {{ jogo.media if jogo.media is not none else '—' }} <small>({{ jogo.total }} avaliações)</small></span><span class="detail">Ver detalhes →</span></div></div>
+</a>
+{% else %}<div class="empty">Nenhum jogo encontrado. Tente outra busca.</div>{% endfor %}
+</div>
+{% endblock %}
